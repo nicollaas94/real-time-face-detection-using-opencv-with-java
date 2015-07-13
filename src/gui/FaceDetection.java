@@ -10,6 +10,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
 package gui;
 
 import java.awt.Graphics;
@@ -24,11 +26,10 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.highgui.Highgui;
-import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
+import org.opencv.videoio.VideoCapture; ///modified into opencv 3.0.0
+import org.opencv.imgcodecs.Imgcodecs; //modified into opencv 3.0.0
 
 /**
  *
@@ -60,11 +61,18 @@ public class FaceDetection extends javax.swing.JFrame {
                             Graphics g = jPanel1.getGraphics();
                             faceDetector.detectMultiScale(frame, faceDetections);
                             for (Rect rect : faceDetections.toArray()) {
-                               // System.out.println("ttt");
-                                Core.rectangle(frame, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+                               //modified into opencv 3.0.0
+                                Imgproc.rectangle(frame, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
                                         new Scalar(0, 255,0));
+                                /*OLD
+                                Core.rectangle(frame, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+                                        new Scalar(0, 255,0));*/
                             }
+                            //modified into opencv 3.0.0
+                            Imgcodecs.imencode(".bmp", frame, mem);
+                            /*OLD
                             Highgui.imencode(".bmp", frame, mem);
+                            */
                             Image im = ImageIO.read(new ByteArrayInputStream(mem.toArray()));
                             BufferedImage buff = (BufferedImage) im;
                             if (g.drawImage(buff, 0, 0, getWidth(), getHeight()-150 , 0, 0, buff.getWidth(), buff.getHeight(), null)) {
